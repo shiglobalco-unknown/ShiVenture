@@ -152,22 +152,25 @@ st.markdown("""
     }
     
     .citadel-cta {
-        background: #007bff;
-        color: #ffffff;
+        background: #ffffff;
+        color: #1a365d;
         padding: 16px 32px;
-        border-radius: 4px;
+        border-radius: 6px;
         text-decoration: none;
         font-size: 16px;
-        font-weight: 500;
+        font-weight: 600;
         display: inline-block;
         transition: all 0.3s ease;
+        border: 2px solid #1a365d;
+        box-shadow: 0 4px 15px rgba(26, 54, 93, 0.2);
     }
     
     .citadel-cta:hover {
-        background: #0056b3;
+        background: #1a365d;
         color: #ffffff;
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+        box-shadow: 0 8px 25px rgba(26, 54, 93, 0.4);
+        border: 2px solid #1a365d;
     }
     
     /* Stats Section */
@@ -411,10 +414,10 @@ with nav1:
         st.session_state.current_page = 'home'
 with nav2:
     if st.button("About", key="nav_about"):
-        st.session_state.current_page = 'home'
+        st.session_state.current_page = 'about'
 with nav3:
     if st.button("Technology", key="nav_tech"):
-        st.session_state.current_page = 'home'
+        st.session_state.current_page = 'technology'
 with nav4:
     if st.button("Futures Dashboard", key="nav_futures"):
         st.session_state.current_page = 'futures_dashboard'
@@ -428,11 +431,11 @@ st.markdown(f"""
     <div class="nav-container">
         <a href="#" class="citadel-logo">SHI VENTURES</a>
         <div class="nav-menu">
-            <a href="#about" class="nav-item {'active' if st.session_state.current_page == 'home' else ''}">Who We Are</a>
-            <a href="#technology" class="nav-item {'active' if st.session_state.current_page == 'home' else ''}">What We Do</a>
+            <a href="#about" class="nav-item {'active' if st.session_state.current_page == 'about' else ''}">About Us</a>
+            <a href="#technology" class="nav-item {'active' if st.session_state.current_page == 'technology' else ''}">Technology</a>
             <a href="#futures" class="nav-item {'active' if st.session_state.current_page == 'futures_dashboard' else ''}" style="color: #007bff;">📊 Dashboard</a>
             <a href="#login" class="nav-item {'active' if st.session_state.current_page == 'login' else ''}" style="color: #007bff;">🔐 Login</a>
-            <a href="#insights" class="nav-item {'active' if st.session_state.current_page == 'home' else ''}">Insights</a>
+            <a href="#insights" class="nav-item {'active' if st.session_state.current_page == 'home' else ''}">Home</a>
         </div>
     </div>
 </nav>
@@ -665,6 +668,350 @@ def render_login_page():
         Instant notifications for account access
         """)
 
+def render_about_page():
+    """Render the About Us page with company story"""
+    st.markdown("""
+    <div style="padding-top: 90px; background: linear-gradient(135deg, #f8fafb 0%, #e8f2f6 100%); min-height: 100vh;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 60px 20px;">
+            <!-- Hero Section -->
+            <div style="text-align: center; margin-bottom: 80px;">
+                <h1 style="color: #1a365d; font-size: 48px; font-weight: 700; margin-bottom: 24px; letter-spacing: -1px;">Our Story</h1>
+                <p style="color: #4a5568; font-size: 20px; line-height: 1.7; max-width: 800px; margin: 0 auto;">
+                    From algorithmic trading pioneers to AI-powered hedge fund leaders, discover the journey that created Shi Ventures.
+                </p>
+            </div>
+            
+            <!-- Story Timeline -->
+            <div style="background: #ffffff; border-radius: 16px; padding: 60px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); margin-bottom: 60px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-bottom: 60px;">
+                    <div>
+                        <h2 style="color: #1a365d; font-size: 36px; font-weight: 700; margin-bottom: 24px;">The Beginning</h2>
+                        <p style="color: #4a5568; font-size: 18px; line-height: 1.7; margin-bottom: 20px;">
+                            Founded in 2019 by a team of quantitative researchers from top-tier financial institutions, 
+                            Shi Ventures began with a simple yet powerful vision: to democratize institutional-grade 
+                            algorithmic trading through artificial intelligence.
+                        </p>
+                        <p style="color: #4a5568; font-size: 18px; line-height: 1.7;">
+                            Our founding team brought together decades of experience from Goldman Sachs, Citadel, 
+                            and Renaissance Technologies, combining traditional quantitative finance with 
+                            cutting-edge machine learning techniques.
+                        </p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #1a365d 0%, #2d5aa0 100%); border-radius: 12px; padding: 40px; color: white; text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700; margin-bottom: 16px; color: #60a5fa;">2019</div>
+                        <div style="font-size: 18px; font-weight: 500;">Founded in San Francisco</div>
+                        <div style="font-size: 14px; margin-top: 8px; opacity: 0.8;">With $2M seed funding</div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-bottom: 60px;">
+                    <div style="background: linear-gradient(135deg, #10b981 0%, #047857 100%); border-radius: 12px; padding: 40px; color: white; text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700; margin-bottom: 16px; color: #6ee7b7;">2021</div>
+                        <div style="font-size: 18px; font-weight: 500;">AI Breakthrough</div>
+                        <div style="font-size: 14px; margin-top: 8px; opacity: 0.8;">15-Agent System Deployed</div>
+                    </div>
+                    <div>
+                        <h2 style="color: #1a365d; font-size: 36px; font-weight: 700; margin-bottom: 24px;">The Innovation</h2>
+                        <p style="color: #4a5568; font-size: 18px; line-height: 1.7; margin-bottom: 20px;">
+                            After two years of intensive research and development, we achieved a breakthrough in 
+                            multi-agent AI systems. Our proprietary 15-agent architecture could process market data, 
+                            identify patterns, and execute trades with unprecedented precision.
+                        </p>
+                        <p style="color: #4a5568; font-size: 18px; line-height: 1.7;">
+                            This innovation earned us recognition from the Financial Technology Association and 
+                            secured Series A funding, allowing us to scale our operations and refine our algorithms.
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
+                    <div>
+                        <h2 style="color: #1a365d; font-size: 36px; font-weight: 700; margin-bottom: 24px;">Today & Tomorrow</h2>
+                        <p style="color: #4a5568; font-size: 18px; line-height: 1.7; margin-bottom: 20px;">
+                            Today, Shi Ventures manages over $150M in assets under management, serving institutional 
+                            clients and sophisticated individual investors. Our AI system operates 24/7, making 
+                            split-second decisions across global markets.
+                        </p>
+                        <p style="color: #4a5568; font-size: 18px; line-height: 1.7;">
+                            Looking ahead, we're pioneering the next generation of financial AI, exploring quantum 
+                            computing applications and expanding into emerging markets worldwide.
+                        </p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); border-radius: 12px; padding: 40px; color: white; text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700; margin-bottom: 16px; color: #c4b5fd;">2024</div>
+                        <div style="font-size: 18px; font-weight: 500">Global Expansion</div>
+                        <div style="font-size: 14px; margin-top: 8px; opacity: 0.8;">$150M+ AUM</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Values Section -->
+            <div style="text-align: center; margin-bottom: 60px;">
+                <h2 style="color: #1a365d; font-size: 36px; font-weight: 700; margin-bottom: 48px;">Our Core Values</h2>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;">
+                    <div style="background: #ffffff; border-radius: 12px; padding: 40px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🎯</div>
+                        <h3 style="color: #1a365d; font-size: 24px; font-weight: 600; margin-bottom: 16px;">Precision</h3>
+                        <p style="color: #4a5568; font-size: 16px; line-height: 1.6;">
+                            Every algorithm, every decision, every trade is executed with mathematical precision and rigorous testing.
+                        </p>
+                    </div>
+                    <div style="background: #ffffff; border-radius: 12px; padding: 40px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🚀</div>
+                        <h3 style="color: #1a365d; font-size: 24px; font-weight: 600; margin-bottom: 16px;">Innovation</h3>
+                        <p style="color: #4a5568; font-size: 16px; line-height: 1.6;">
+                            We push the boundaries of what's possible in AI-driven finance, constantly evolving our technology.
+                        </p>
+                    </div>
+                    <div style="background: #ffffff; border-radius: 12px; padding: 40px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🤝</div>
+                        <h3 style="color: #1a365d; font-size: 24px; font-weight: 600; margin-bottom: 16px;">Integrity</h3>
+                        <p style="color: #4a5568; font-size: 16px; line-height: 1.6;">
+                            Transparency, ethical practices, and client-first thinking guide every aspect of our operations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Team Section -->
+            <div style="background: #ffffff; border-radius: 16px; padding: 60px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); text-align: center;">
+                <h2 style="color: #1a365d; font-size: 36px; font-weight: 700; margin-bottom: 24px;">Leadership Team</h2>
+                <p style="color: #4a5568; font-size: 18px; line-height: 1.7; margin-bottom: 48px; max-width: 700px; margin-left: auto; margin-right: auto;">
+                    Led by industry veterans with combined experience of over 50 years in quantitative finance, 
+                    AI research, and institutional asset management.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px;">
+                    <div style="text-align: center;">
+                        <div style="background: linear-gradient(135deg, #1a365d 0%, #2d5aa0 100%); width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-size: 24px; font-weight: 700;">AS</span>
+                        </div>
+                        <h4 style="color: #1a365d; font-size: 16px; font-weight: 600; margin-bottom: 8px;">Anthony Shi</h4>
+                        <p style="color: #4a5568; font-size: 14px;">Founder & CEO</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="background: linear-gradient(135deg, #10b981 0%, #047857 100%); width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-size: 24px; font-weight: 700;">DR</span>
+                        </div>
+                        <h4 style="color: #1a365d; font-size: 16px; font-weight: 600; margin-bottom: 8px;">Dr. Sarah Chen</h4>
+                        <p style="color: #4a5568; font-size: 14px;">Chief Technology Officer</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-size: 24px; font-weight: 700;">MR</span>
+                        </div>
+                        <h4 style="color: #1a365d; font-size: 16px; font-weight: 600; margin-bottom: 8px;">Michael Rodriguez</h4>
+                        <p style="color: #4a5568; font-size: 14px;">Head of Quantitative Research</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-size: 24px; font-weight: 700;">JK</span>
+                        </div>
+                        <h4 style="color: #1a365d; font-size: 16px; font-weight: 600; margin-bottom: 8px;">Jennifer Kim</h4>
+                        <p style="color: #4a5568; font-size: 14px;">Chief Risk Officer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+def render_technology_page():
+    """Render the Technology page showcasing AI agents and optimization"""
+    st.markdown("""
+    <div style="padding-top: 90px; background: #ffffff; min-height: 100vh;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 60px 20px;">
+            <!-- Hero Section -->
+            <div style="text-align: center; margin-bottom: 80px;">
+                <h1 style="color: #1a365d; font-size: 48px; font-weight: 700; margin-bottom: 24px; letter-spacing: -1px;">AI-Powered Trading Technology</h1>
+                <p style="color: #4a5568; font-size: 20px; line-height: 1.7; max-width: 800px; margin: 0 auto;">
+                    Discover how our proprietary 15-agent AI system revolutionizes trading through advanced machine learning, 
+                    real-time optimization, and institutional-grade risk management.
+                </p>
+            </div>
+            
+            <!-- Core Architecture -->
+            <div style="background: linear-gradient(135deg, #f8fafb 0%, #e8f2f6 100%); border-radius: 16px; padding: 60px; margin-bottom: 60px;">
+                <h2 style="color: #1a365d; font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 48px;">Multi-Agent Architecture</h2>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;">
+                    <div style="background: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); border-left: 4px solid #1a365d;">
+                        <h3 style="color: #1a365d; font-size: 20px; font-weight: 600; margin-bottom: 16px;">🏛️ Executive Tier</h3>
+                        <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+                            Portfolio-wide oversight and strategic asset allocation
+                        </p>
+                        <ul style="color: #4a5568; font-size: 14px; line-height: 1.6; padding-left: 20px;">
+                            <li>Master Risk Controller</li>
+                            <li>Strategic Asset Allocator</li>
+                            <li>Performance Monitor</li>
+                        </ul>
+                    </div>
+                    <div style="background: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); border-left: 4px solid #10b981;">
+                        <h3 style="color: #1a365d; font-size: 20px; font-weight: 600; margin-bottom: 16px;">📊 Strategic Tier</h3>
+                        <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+                            Asset class specialization and market execution
+                        </p>
+                        <ul style="color: #4a5568; font-size: 14px; line-height: 1.6; padding-left: 20px;">
+                            <li>Equity Trading Agent</li>
+                            <li>Fixed Income Agent</li>
+                            <li>FX Trading Agent</li>
+                        </ul>
+                    </div>
+                    <div style="background: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); border-left: 4px solid #8b5cf6;">
+                        <h3 style="color: #1a365d; font-size: 20px; font-weight: 600; margin-bottom: 16px;">⚡ Execution Tier</h3>
+                        <p style="color: #4a5568; font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+                            Real-time execution and risk monitoring
+                        </p>
+                        <ul style="color: #4a5568; font-size: 14px; line-height: 1.6; padding-left: 20px;">
+                            <li>Smart Order Router</li>
+                            <li>Risk Management System</li>
+                            <li>News Sentiment Agent</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Unique Value Propositions -->
+            <div style="margin-bottom: 60px;">
+                <h2 style="color: #1a365d; font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 48px;">Unique Competitive Advantages</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px;">
+                    <div>
+                        <div style="background: linear-gradient(135deg, #1a365d 0%, #2d5aa0 100%); border-radius: 12px; padding: 40px; color: white; margin-bottom: 40px;">
+                            <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">🧠 Adaptive Learning Engine</h3>
+                            <p style="font-size: 16px; line-height: 1.6; opacity: 0.9;">
+                                Our AI agents continuously learn and adapt to market conditions using reinforcement learning. 
+                                Unlike static algorithms, our system evolves with market changes, improving performance over time.
+                            </p>
+                            <div style="background: rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 20px; margin-top: 20px;">
+                                <div style="font-size: 14px; opacity: 0.8; margin-bottom: 8px;">Key Innovation:</div>
+                                <div style="font-size: 16px; font-weight: 500;">Real-time strategy optimization based on market microstructure changes</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, #10b981 0%, #047857 100%); border-radius: 12px; padding: 40px; color: white;">
+                            <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">🎯 Precision Execution</h3>
+                            <p style="font-size: 16px; line-height: 1.6; opacity: 0.9;">
+                                Sub-millisecond execution with intelligent order routing across 40+ venues. 
+                                Our Smart Order Router minimizes market impact while maximizing fill rates.
+                            </p>
+                            <div style="background: rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 20px; margin-top: 20px;">
+                                <div style="font-size: 14px; opacity: 0.8; margin-bottom: 8px;">Performance Metric:</div>
+                                <div style="font-size: 16px; font-weight: 500;">Average execution time: 0.7 milliseconds</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); border-radius: 12px; padding: 40px; color: white; margin-bottom: 40px;">
+                            <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">🔗 Cross-Asset Correlation</h3>
+                            <p style="font-size: 16px; line-height: 1.6; opacity: 0.9;">
+                                Our system identifies hidden correlations across asset classes, currencies, and time zones. 
+                                This multi-dimensional approach captures opportunities others miss.
+                            </p>
+                            <div style="background: rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 20px; margin-top: 20px;">
+                                <div style="font-size: 14px; opacity: 0.8; margin-bottom: 8px;">Coverage:</div>
+                                <div style="font-size: 16px; font-weight: 500;">15,000+ instruments across global markets</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 12px; padding: 40px; color: white;">
+                            <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">🛡️ Dynamic Risk Management</h3>
+                            <p style="font-size: 16px; line-height: 1.6; opacity: 0.9;">
+                                Real-time portfolio stress testing and automated hedging. Our risk system anticipates 
+                                market volatility and adjusts positions before risks materialize.
+                            </p>
+                            <div style="background: rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 20px; margin-top: 20px;">
+                                <div style="font-size: 14px; opacity: 0.8; margin-bottom: 8px;">Response Time:</div>
+                                <div style="font-size: 16px; font-weight: 500;">Automated hedging within 100 microseconds</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Strategy Optimization -->
+            <div style="background: linear-gradient(135deg, #f8fafb 0%, #e8f2f6 100%); border-radius: 16px; padding: 60px; margin-bottom: 60px;">
+                <h2 style="color: #1a365d; font-size: 36px; font-weight: 700; text-align: center; margin-bottom: 24px;">Strategy Optimization Engine</h2>
+                <p style="color: #4a5568; font-size: 18px; text-align: center; margin-bottom: 48px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    Our proprietary optimization engine continuously refines trading strategies using quantum-inspired algorithms 
+                    and advanced statistical methods.
+                </p>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px;">
+                    <div style="background: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);">
+                        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <div style="background: linear-gradient(135deg, #1a365d 0%, #2d5aa0 100%); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+                                <span style="color: white; font-size: 20px;">📈</span>
+                            </div>
+                            <h3 style="color: #1a365d; font-size: 20px; font-weight: 600;">Bayesian Optimization</h3>
+                        </div>
+                        <p style="color: #4a5568; font-size: 16px; line-height: 1.6;">
+                            Continuously optimizes strategy parameters using Bayesian inference, improving Sharpe ratios by 15-25% through intelligent parameter tuning.
+                        </p>
+                    </div>
+                    
+                    <div style="background: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);">
+                        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <div style="background: linear-gradient(135deg, #10b981 0%, #047857 100%); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+                                <span style="color: white; font-size: 20px;">🔄</span>
+                            </div>
+                            <h3 style="color: #1a365d; font-size: 20px; font-weight: 600;">Genetic Algorithms</h3>
+                        </div>
+                        <p style="color: #4a5568; font-size: 16px; line-height: 1.6;">
+                            Evolves trading strategies through genetic programming, creating novel approaches that traditional methods cannot discover.
+                        </p>
+                    </div>
+                    
+                    <div style="background: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);">
+                        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <div style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+                                <span style="color: white; font-size: 20px;">🎲</span>
+                            </div>
+                            <h3 style="color: #1a365d; font-size: 20px; font-weight: 600;">Monte Carlo Simulation</h3>
+                        </div>
+                        <p style="color: #4a5568; font-size: 16px; line-height: 1.6;">
+                            Runs millions of market scenarios to stress-test strategies and optimize for risk-adjusted returns across different market regimes.
+                        </p>
+                    </div>
+                    
+                    <div style="background: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);">
+                        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+                                <span style="color: white; font-size: 20px;">🧮</span>
+                            </div>
+                            <h3 style="color: #1a365d; font-size: 20px; font-weight: 600;">Quantum Annealing</h3>
+                        </div>
+                        <p style="color: #4a5568; font-size: 16px; line-height: 1.6;">
+                            Leverages quantum-inspired optimization for portfolio construction, solving complex optimization problems in seconds rather than hours.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Technical Stats -->
+            <div style="background: linear-gradient(135deg, #1a365d 0%, #2d5aa0 100%); border-radius: 16px; padding: 60px; color: white; text-align: center;">
+                <h2 style="font-size: 36px; font-weight: 700; margin-bottom: 48px;">System Performance Metrics</h2>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;">
+                    <div>
+                        <div style="font-size: 42px; font-weight: 700; margin-bottom: 12px; color: #60a5fa;">99.97%</div>
+                        <div style="font-size: 16px; opacity: 0.9;">System Uptime</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 42px; font-weight: 700; margin-bottom: 12px; color: #6ee7b7;">0.7ms</div>
+                        <div style="font-size: 16px; opacity: 0.9;">Avg Execution Time</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 42px; font-weight: 700; margin-bottom: 12px; color: #c4b5fd;">15,000+</div>
+                        <div style="font-size: 16px; opacity: 0.9;">Instruments Tracked</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 42px; font-weight: 700; margin-bottom: 12px; color: #fcd34d;">24/7</div>
+                        <div style="font-size: 16px; opacity: 0.9;">Global Operations</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
 def render_main_website():
     """Render main AI hedge fund website"""
     
@@ -785,10 +1132,14 @@ st.markdown("""
 </footer>
 """, unsafe_allow_html=True)
 
-# Main execution
+# Main execution with page routing
 if st.session_state.current_page == 'futures_dashboard':
     render_professional_dashboard()
 elif st.session_state.current_page == 'login':
     render_login_page()
+elif st.session_state.current_page == 'about':
+    render_about_page()
+elif st.session_state.current_page == 'technology':
+    render_technology_page()
 else:
     render_main_website()
