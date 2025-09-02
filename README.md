@@ -1,11 +1,12 @@
 # 🏛️ Shi Ventures - AI Hedge Fund Platform
 
-**Professional trading interface with real-time updates**  
+**Live Site:** [shiventure.com](https://shiventure.com)  
+**Professional trading interface with real-time updates and live dashboard**  
 **Sanitized for public GitHub repository**
 
 ## 🎯 Project Overview
 
-Professional AI hedge fund platform showcasing institutional-grade trading interface design with live updates, real-time data simulation, and Charles Schwab-inspired styling.
+Professional AI hedge fund platform showcasing institutional-grade trading interface design with live updates, real-time data simulation, Charles Schwab-inspired styling, and comprehensive 15-agent AI system visualization.
 
 ## 🌟 Features
 

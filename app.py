@@ -1,7 +1,7 @@
 """
-Shi Ventures - AI Hedge Fund Platform
-Professional trading interface with real-time updates
-Sanitized version for public GitHub repository
+Shi Ventures - Enhanced AI Hedge Fund Platform
+Professional trading interface with real-time updates and live dashboard
+Domain: shiventure.com - Sanitized for public GitHub repository
 """
 
 import streamlit as st
@@ -20,7 +20,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'components'))
 
 # Page config
 st.set_page_config(
-    page_title="Shi Ventures - AI Hedge Fund Platform",
+    page_title="Shi Ventures - Where Global Markets Evolve",
     page_icon="🏛️",
     layout="wide",
     initial_sidebar_state="collapsed"
