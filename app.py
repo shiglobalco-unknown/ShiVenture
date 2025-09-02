@@ -14,6 +14,7 @@ import os
 from datetime import datetime, timedelta
 import time
 import random
+import math
 
 # Add components directory to Python path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'components'))
@@ -314,25 +315,43 @@ def initialize_session_state():
     if 'last_update' not in st.session_state:
         st.session_state.last_update = datetime.now()
     
+    if 'start_time' not in st.session_state:
+        st.session_state.start_time = datetime.now().timestamp()
+    
     if 'demo_data' not in st.session_state:
         st.session_state.demo_data = generate_demo_data()
 
 def generate_demo_data():
-    """Generate realistic demo trading data with live updates"""
-    base_time = datetime.now()
+    """Generate realistic demo trading data with precise real-time synchronization"""
+    precise_time = datetime.now()
+    
+    # Use time-based seed for consistent but changing data
+    time_seed = int(precise_time.timestamp())
+    random.seed(time_seed)
+    
+    # Generate time-synchronized market data
+    base_value = 87450.25
+    time_factor = precise_time.second + (precise_time.microsecond / 1000000)
+    market_volatility = 1 + 0.1 * math.sin(time_factor * 2 * math.pi / 60)  # Sine wave volatility
     
     return {
-        'account_value': 87450.25 + random.uniform(-500, 500),
-        'day_pnl': random.uniform(-1000, 2000),
-        'day_pnl_pct': random.uniform(-2.5, 3.0),
-        'positions': generate_demo_positions(),
-        'market_data': generate_market_data(),
-        'last_update': base_time
+        'account_value': base_value + (random.uniform(-500, 500) * market_volatility),
+        'day_pnl': random.uniform(-1000, 2000) * market_volatility,
+        'day_pnl_pct': random.uniform(-2.5, 3.0) * market_volatility,
+        'positions': generate_demo_positions(precise_time),
+        'market_data': generate_market_data(precise_time),
+        'last_update': precise_time,
+        'millisecond_precision': precise_time.microsecond // 1000  # Store milliseconds for precision
     }
 
-def generate_demo_positions():
-    """Generate demo futures positions"""
+def generate_demo_positions(timestamp=None):
+    """Generate demo futures positions with time synchronization"""
+    if timestamp is None:
+        timestamp = datetime.now()
+        
     symbols = ['ES', 'NQ', 'CL', 'GC', 'ZN']
+    time_seed = int(timestamp.timestamp())
+    random.seed(time_seed)
     positions = []
     
     for symbol in random.sample(symbols, 3):  # Random 3 positions
@@ -362,11 +381,22 @@ def get_symbol_description(symbol):
     }
     return descriptions.get(symbol, symbol)
 
-def generate_market_data():
-    """Generate live market data simulation"""
+def generate_market_data(timestamp=None):
+    """Generate real-time market data with time synchronization"""
+    if timestamp is None:
+        timestamp = datetime.now()
+    
+    # Use timestamp for consistent market simulation
+    time_seed = int(timestamp.timestamp())
+    random.seed(time_seed)
+    
+    # Time-based market oscillation
+    time_factor = timestamp.second + (timestamp.microsecond / 1000000)
+    market_trend = math.sin(time_factor * 2 * math.pi / 60)  # 60-second cycle
+    
     return {
-        'ES': {'price': 4485.25 + random.uniform(-10, 10), 'change': random.uniform(-20, 20)},
-        'NQ': {'price': 15847.50 + random.uniform(-50, 50), 'change': random.uniform(-100, 100)},
+        'ES': {'price': 4485.25 + (10 * market_trend) + random.uniform(-5, 5), 'change': random.uniform(-20, 20)},
+        'NQ': {'price': 15847.50 + (50 * market_trend) + random.uniform(-25, 25), 'change': random.uniform(-100, 100)},
         'CL': {'price': 82.45 + random.uniform(-2, 2), 'change': random.uniform(-3, 3)},
         'GC': {'price': 2045.20 + random.uniform(-10, 10), 'change': random.uniform(-15, 15)},
     }
@@ -408,12 +438,18 @@ st.markdown(f"""
 </nav>
 """, unsafe_allow_html=True)
 
-# Auto-refresh every 5 seconds for live updates
+# Real-time auto-refresh system for live updates
 if st.session_state.current_page == 'futures_dashboard':
-    # Check if data needs refreshing (every 5 seconds)
-    if (datetime.now() - st.session_state.last_update).seconds > 5:
+    # Calculate precise time difference for real-time updates
+    now = datetime.now()
+    time_diff = (now - st.session_state.last_update).total_seconds()
+    
+    # Refresh data every 1 second for true real-time experience
+    if time_diff >= 1.0:
         st.session_state.demo_data = generate_demo_data()
-        st.session_state.last_update = datetime.now()
+        st.session_state.last_update = now
+        # Force rerun for continuous updates
+        st.rerun()
 
 def render_professional_dashboard():
     """Professional trading dashboard with live updates"""
@@ -429,13 +465,22 @@ def render_professional_dashboard():
     </div>
     """, unsafe_allow_html=True)
     
-    # Live update indicator
-    current_time = datetime.now().strftime("%H:%M:%S EST")
+    # Real-time clock with microsecond precision
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    microseconds = f"{now.microsecond:06d}"[:3]  # Show first 3 digits of microseconds
+    
     st.markdown(f"""
     <div style="text-align: center; margin-bottom: 20px;">
-        <span style="background: #10b981; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px;">
-            🟢 LIVE - Last Updated: {current_time}
-        </span>
+        <div style="background: #10b981; color: white; padding: 8px 16px; border-radius: 25px; font-size: 14px; font-family: 'Courier New', monospace; display: inline-block; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);">
+            🟢 LIVE - {current_time}.{microseconds} EST
+        </div>
+        <div style="font-size: 11px; color: #666666; margin-top: 4px;">
+            Auto-refreshing every second • Real-time synchronized data • Precision timing
+        </div>
+        <div style="font-size: 10px; color: #999999; margin-top: 2px; font-family: 'Courier New', monospace;">
+            System uptime: {int((now.timestamp() - st.session_state.get('start_time', now.timestamp())))}s • Refresh rate: 1000ms
+        </div>
     </div>
     """, unsafe_allow_html=True)
     
