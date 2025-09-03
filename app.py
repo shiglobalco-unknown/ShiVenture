@@ -16,6 +16,16 @@ import time
 import random
 import math
 
+# Import trading system components
+try:
+    from trading_engine import trading_engine, OrderSide, OrderType
+    from live_data import data_manager
+    from trading_config import CONFIG
+    TRADING_SYSTEM_AVAILABLE = True
+except ImportError as e:
+    st.warning(f"Trading system not available: {e}")
+    TRADING_SYSTEM_AVAILABLE = False
+
 # Add components directory to Python path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'components'))
 
@@ -455,14 +465,14 @@ if st.session_state.current_page == 'futures_dashboard':
         st.rerun()
 
 def render_professional_dashboard():
-    """Professional trading dashboard with live updates"""
+    """Functional AI Trading Dashboard with live execution capabilities"""
     
     st.markdown("""
     <div style="padding-top: 90px; background: #ffffff; min-height: 100vh;">
         <div style="max-width: 1400px; margin: 0 auto; padding: 40px 20px;">
             <div style="text-align: center; margin-bottom: 40px;">
-                <h1 style="color: #32373c; font-size: 42px; font-weight: 700; margin-bottom: 16px;">Professional Trading Dashboard</h1>
-                <p style="color: #666666; font-size: 18px; margin-bottom: 20px;">Real-time portfolio monitoring with live updates</p>
+                <h1 style="color: #32373c; font-size: 42px; font-weight: 700; margin-bottom: 16px;">🤖 AI Trading System</h1>
+                <p style="color: #666666; font-size: 18px; margin-bottom: 20px;">Live trading execution and portfolio management</p>
             </div>
         </div>
     </div>
@@ -487,15 +497,248 @@ def render_professional_dashboard():
     </div>
     """, unsafe_allow_html=True)
     
-    # Account overview metrics
-    demo_data = st.session_state.demo_data
+    # Trading System Status
+    if TRADING_SYSTEM_AVAILABLE:
+        # Get real portfolio data
+        portfolio = trading_engine.get_portfolio_summary()
+        market_data = data_manager.get_all_market_data()
+        
+        # System status indicators
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            status_color = "#10b981" if data_manager.is_connected else "#ef4444"
+            status_text = "CONNECTED" if data_manager.is_connected else "DISCONNECTED"
+            st.markdown(f"""
+            <div style="background: {status_color}; color: white; padding: 12px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 14px; font-weight: 600;">{status_text}</div>
+                <div style="font-size: 12px; opacity: 0.9;">Market Data Feed</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            ai_status = "ACTIVE" if CONFIG.enable_ai_trading else "INACTIVE"
+            ai_color = "#10b981" if CONFIG.enable_ai_trading else "#f59e0b"
+            st.markdown(f"""
+            <div style="background: {ai_color}; color: white; padding: 12px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 14px; font-weight: 600;">{ai_status}</div>
+                <div style="font-size: 12px; opacity: 0.9;">AI Trading System</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            positions_count = portfolio['total_positions']
+            st.markdown(f"""
+            <div style="background: #1a365d; color: white; padding: 12px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 14px; font-weight: 600;">{positions_count}</div>
+                <div style="font-size: 12px; opacity: 0.9;">Active Positions</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col4:
+            total_pnl = portfolio['unrealized_pnl']
+            pnl_color = "#10b981" if total_pnl >= 0 else "#ef4444"
+            pnl_sign = "+" if total_pnl >= 0 else ""
+            st.markdown(f"""
+            <div style="background: {pnl_color}; color: white; padding: 12px; border-radius: 8px; text-align: center;">
+                <div style="font-size: 14px; font-weight: 600;">{pnl_sign}${total_pnl:.2f}</div>
+                <div style="font-size: 12px; opacity: 0.9;">Unrealized P&L</div>
+            </div>
+            """, unsafe_allow_html=True)
+    else:
+        st.error("⚠️ Trading system not available. Please check configuration.")
+        demo_data = st.session_state.demo_data
     
-    col1, col2, col3, col4 = st.columns(4)
+    st.markdown("---")
     
-    with col1:
+    # Trading Interface
+    if TRADING_SYSTEM_AVAILABLE:
+        col1, col2 = st.columns([2, 1])
+        
+        with col1:
+            st.markdown("### 📊 Live Positions & Market Data")
+            
+            # Market Data Display
+            if market_data:
+                market_df = pd.DataFrame([
+                    {
+                        'Symbol': data.symbol,
+                        'Price': f"${data.price:.2f}",
+                        'Bid/Ask': f"${data.bid:.2f} / ${data.ask:.2f}",
+                        'Change': f"{data.change:+.2f} ({data.change_percent:+.2f}%)",
+                        'Volume': f"{data.volume:,}",
+                        'Last Update': data.timestamp.strftime("%H:%M:%S")
+                    }
+                    for data in list(market_data.values())[:6]  # Show top 6 instruments
+                ])
+                st.dataframe(market_df, use_container_width=True)
+            else:
+                st.info("⏳ Loading market data...")
+            
+            # Current Positions
+            if portfolio['positions']:
+                st.markdown("### 💼 Current Positions")
+                positions_data = []
+                for pos_id, pos in portfolio['positions'].items():
+                    pnl_color = "🟢" if pos['unrealized_pnl'] >= 0 else "🔴"
+                    positions_data.append({
+                        'Symbol': pos['symbol'],
+                        'Quantity': pos['quantity'],
+                        'Entry': f"${pos['entry_price']:.2f}",
+                        'Current': f"${pos['current_price']:.2f}",
+                        'P&L': f"{pnl_color} ${pos['unrealized_pnl']:+.2f}",
+                        'Entry Time': pos['entry_time'].strftime("%H:%M:%S"),
+                        'Position ID': pos_id[:8]  # Short ID for display
+                    })
+                
+                positions_df = pd.DataFrame(positions_data)
+                st.dataframe(positions_df, use_container_width=True)
+                
+                # Position Management
+                if st.button("🔄 Refresh Positions", use_container_width=True):
+                    st.rerun()
+            else:
+                st.info("📋 No active positions")
+        
+        with col2:
+            st.markdown("### ⚡ Order Entry")
+            
+            # Order Entry Form
+            with st.form("order_form"):
+                symbol = st.selectbox("Symbol", CONFIG.allowed_symbols)
+                side = st.selectbox("Side", ["BUY", "SELL"])
+                quantity = st.number_input("Quantity", min_value=1, max_value=100, value=1)
+                order_type = st.selectbox("Order Type", ["MARKET", "LIMIT"])
+                
+                limit_price = None
+                if order_type == "LIMIT":
+                    limit_price = st.number_input("Limit Price", min_value=0.01, step=0.01)
+                
+                submitted = st.form_submit_button("📈 Submit Order", type="primary", use_container_width=True)
+                
+                if submitted:
+                    try:
+                        order_side = OrderSide.BUY if side == "BUY" else OrderSide.SELL
+                        order_type_enum = OrderType.MARKET if order_type == "MARKET" else OrderType.LIMIT
+                        
+                        success, result = trading_engine.submit_order(
+                            symbol=symbol,
+                            side=order_side,
+                            quantity=float(quantity),
+                            order_type=order_type_enum,
+                            price=limit_price,
+                            agent_id="manual_trader"
+                        )
+                        
+                        if success:
+                            st.success(f"✅ Order submitted: {symbol} {side} {quantity}")
+                            time.sleep(1)
+                            st.rerun()
+                        else:
+                            st.error(f"❌ Order failed: {result}")
+                    
+                    except Exception as e:
+                        st.error(f"❌ Error: {str(e)}")
+            
+            st.markdown("### 🎛️ AI Agent Controls")
+            
+            # AI Agent Status
+            agent_status = portfolio.get('agent_status', {})
+            for agent_id, status in agent_status.items():
+                status_icon = "🟢" if status['active'] else "🔴"
+                agent_name = agent_id.replace('_', ' ').title()
+                st.markdown(f"{status_icon} **{agent_name}**")
+            
+            # Configuration Display
+            st.markdown("### ⚙️ System Config")
+            st.json({
+                'Max Position Size': f"${CONFIG.max_position_size:,.2f}",
+                'Risk Per Trade': f"{CONFIG.risk_per_trade:.1%}",
+                'Max Positions': CONFIG.max_concurrent_positions,
+                'AI Trading': "Enabled" if CONFIG.enable_ai_trading else "Disabled",
+                'Update Interval': f"{CONFIG.agent_update_interval}s"
+            })
+    else:
+        # Fallback to demo data display
+        col1, col2, col3, col4 = st.columns(4)
+        demo_data = st.session_state.demo_data
         pnl_delta = f"+${demo_data['day_pnl']:.2f}" if demo_data['day_pnl'] >= 0 else f"${demo_data['day_pnl']:.2f}"
         st.metric("Account Value", f"${demo_data['account_value']:,.2f}", 
                  f"{pnl_delta} ({demo_data['day_pnl_pct']:+.2f}%)")
+    
+    # Emergency Controls Section  
+    st.markdown("---")
+    if TRADING_SYSTEM_AVAILABLE:
+        st.markdown("### 🚨 Emergency Controls")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("""
+            <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 20px; border-radius: 12px; color: white; text-align: center; margin-bottom: 16px;">
+                <h4 style="margin: 0 0 12px 0;">🔒 Trading Lock</h4>
+                <p style="margin: 0; font-size: 14px;">Prevent new positions while keeping existing ones</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            if st.button("🔒 Activate Trading Lock", key="trading_lock", use_container_width=True):
+                trading_engine.enable_trading_lock()
+                st.warning("⚠️ Trading lock activated! New positions blocked.")
+                time.sleep(1)
+                st.rerun()
+            
+            if st.button("🔓 Release Trading Lock", key="release_lock", use_container_width=True):
+                trading_engine.disable_trading_lock()
+                st.success("✅ Trading lock released. Normal operations resumed.")
+                time.sleep(1)
+                st.rerun()
+        
+        with col2:
+            st.markdown("""
+            <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 20px; border-radius: 12px; color: white; text-align: center; margin-bottom: 16px;">
+                <h4 style="margin: 0 0 12px 0;">💀 Kill Switch</h4>
+                <p style="margin: 0; font-size: 14px;">Close ALL positions immediately</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Confirmation checkbox for kill switch
+            confirm_kill = st.checkbox("⚠️ I understand this will close ALL positions", key="confirm_kill")
+            
+            if st.button("💀 EMERGENCY STOP", key="kill_switch", 
+                        disabled=not confirm_kill, use_container_width=True, type="primary"):
+                with st.spinner("Executing emergency stop..."):
+                    results = trading_engine.emergency_close_all()
+                    successful_closes = sum(results.values())
+                    total_positions = len(results)
+                    
+                    if successful_closes == total_positions:
+                        st.success(f"✅ Emergency stop completed! {successful_closes} positions closed.")
+                    else:
+                        st.error(f"⚠️ Partial success: {successful_closes}/{total_positions} positions closed.")
+                    
+                    time.sleep(2)
+                    st.rerun()
+        
+        # Recent Execution Log
+        st.markdown("### 📜 Recent Executions")
+        recent_executions = portfolio.get('recent_executions', [])
+        if recent_executions:
+            execution_data = []
+            for exec_record in recent_executions[-5:]:  # Last 5 executions
+                execution_data.append({
+                    'Time': exec_record['timestamp'].strftime("%H:%M:%S"),
+                    'Order ID': exec_record['order_id'][:8],
+                    'Symbol': exec_record['symbol'],
+                    'Side': exec_record['side'].upper(),
+                    'Quantity': exec_record['quantity'],
+                    'Fill Price': f"${exec_record['fill_price']:.2f}",
+                    'Agent': exec_record.get('agent_id', 'manual')[:12]
+                })
+            
+            executions_df = pd.DataFrame(execution_data)
+            st.dataframe(executions_df, use_container_width=True)
+        else:
+            st.info("No recent executions")
     
     with col2:
         buying_power = demo_data['account_value'] * 0.5  # Demo calculation
